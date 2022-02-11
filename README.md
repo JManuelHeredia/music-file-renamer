@@ -2,11 +2,30 @@ This only works for files with current metatags available. If not the result wil
 
 ## Usage
 
-Just run ``node <files_path> ``where the mp3 files are stored
+```
+npm install
+```
 
+If you dont have TypeScript installed then run in terminal as Admin:
+```
+npm install --global typescript
+```
+
+Transpile .ts files in root directory
+```
+tsc
+```
+
+Just run ``node ... <files_path> `` where the mp3 files are stored
+
+```
+node .\dist\index.js "D:\Music"
+```
+or
 ```
 node .\index.js "D:\Music"
 ```
+depending on where are you located...
 
 For now only runs on windows because difference on path names. This will work on Linux as soon as possible. Also exceptions have to be done like already renamed files...
 
