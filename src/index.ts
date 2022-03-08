@@ -72,11 +72,17 @@ function main(): void{
         }
 
         const newFilename:string = `${argPath}\\${newTitle}-${newArtist}.mp3`;
-        // Rename files that can be renamed
-        fs.rename(filename, newFilename, (err) => {
-            if(err) throw err;
-            console.log(filename, "renamed succefully!");
-        });
+        //
+        if(filename == newFilename){
+            console.log(`${newTitle}-${newArtist}.mp3`, 'not renamed, file already has the expected name.');
+        }
+        else{
+            // Rename files that can be renamed
+            fs.rename(filename, newFilename, (err) => {
+                if(err) throw err;
+                console.log(filename, "renamed succefully!");
+            });
+        }
     });
     // Finish?
 }
