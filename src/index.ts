@@ -2,6 +2,7 @@
 import fs from 'fs';
 import NodeID3 from 'node-id3';
 import { stringCleaner } from './helpers/string-parser';
+import { uppercaseMatch } from './helpers/uppercase-matcher';
 
 function main(): void{
     const argPath:string = process.argv[2].toString();
@@ -30,7 +31,8 @@ function main(): void{
     files.forEach(file => {
         const filename:string =  `${argPath}\\${file}`;
         const tags:any = NodeID3.read(`${argPath}\\${file}`, options);
-        let { title, artist }: { title:string; artist:string  } = { ...tags };
+        let { album, title, artist }: { album:string; title:string; artist:string  } = { ...tags };
+        // console.log(tags);
         if(!title){
             console.warn(filename, "data missing: Title");
             // title = '[MISSING_TITLE]';
@@ -40,9 +42,36 @@ function main(): void{
             // artist = '[MISSING_ARTIST]';
         }
         // Sanitize and trim file name
-        title  = stringCleaner(title)  || '[MISSING_TITLE]';
-        artist = stringCleaner(artist) || '[MISSING_ARTIST]';
-        const newFilename:string = `${argPath}\\${title}-${artist}.mp3`;
+        const newTitle  = stringCleaner(title)  || '[MISSING_TITLE]';
+        const newArtist = stringCleaner(artist) || '[MISSING_ARTIST]';
+
+        //Remove Uppercase for MetaTags
+        if(uppercaseMatch(title)){
+            NodeID3.update(
+                {
+                    title: newTitle
+                },
+                filename
+            );
+        }
+        if(uppercaseMatch(artist)){
+            NodeID3.update(
+                {
+                    artist: newArtist
+                },
+                filename
+            );
+        }
+        if(uppercaseMatch(album)){
+            NodeID3.update(
+                {
+                    album: stringCleaner(album) || ''
+                },
+                filename
+            );
+        }
+
+        const newFilename:string = `${argPath}\\${newTitle}-${newArtist}.mp3`;
         // Rename files that can be renamed
         fs.rename(filename, newFilename, (err) => {
             if(err) throw err;
