@@ -21,7 +21,7 @@ Just run ``node ... <files_path> `` where the mp3 files are stored
 ```
 node .\dist\index.js "D:\Music"
 ```
-or
+or cd to dist
 ```
 node .\index.js "D:\Music"
 ```
@@ -35,3 +35,7 @@ For now only runs on windows because difference on path names. This will work on
 
 
 ![Sample image](/test.png)
+
+## TODO:
+
+Like UnitWork for updating metatags
