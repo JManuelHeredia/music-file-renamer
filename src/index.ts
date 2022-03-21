@@ -1,16 +1,14 @@
 // import yargs from 'yargs/yargs';
 import fs from 'fs';
 import NodeID3 from 'node-id3';
-import { stringCleaner } from './helpers/string-parser';
+import { titleCaseParser } from './helpers/string-parser';
 import { uppercaseMatch } from './helpers/uppercase-matcher';
 
 function main(): void{
     const argPath:string = process.argv[2].toString();
 
-    const musicFolder: boolean = fs.existsSync(argPath);
-
-    if(!musicFolder){
-        console.log(`Invalid path ${argPath}`);
+    if(!fs.existsSync(argPath)){
+        console.log(`Invalid path ${argPath}... Exiting...`);
         return;
     }
 
@@ -42,8 +40,8 @@ function main(): void{
             // artist = '[MISSING_ARTIST]';
         }
         // Sanitize and trim file name
-        const newTitle  = stringCleaner(title)  || '[MISSING_TITLE]';
-        const newArtist = stringCleaner(artist) || '[MISSING_ARTIST]';
+        const newTitle:string  = titleCaseParser(title)  || '[MISSING_TITLE]';
+        const newArtist:string = titleCaseParser(artist) || '[MISSING_ARTIST]';
 
         //Remove Uppercase for MetaTags
         if(uppercaseMatch(title)){
@@ -62,10 +60,10 @@ function main(): void{
                 filename
             );
         }
-        if(uppercaseMatch(album)){
+        if(uppercaseMatch(album) || album != titleCaseParser(album)){
             NodeID3.update(
                 {
-                    album: stringCleaner(album) || ''
+                    album: titleCaseParser(album) || ''
                 },
                 filename
             );
