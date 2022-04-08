@@ -1,4 +1,3 @@
-// import yargs from 'yargs/yargs';
 import fs from 'fs';
 import NodeID3 from 'node-id3';
 import { titleCaseParser } from './helpers/string-parser';
@@ -44,7 +43,7 @@ function main(): void{
         const newArtist:string = titleCaseParser(artist) || '[MISSING_ARTIST]';
 
         //Remove Uppercase for MetaTags
-        if(uppercaseMatch(title)){
+        if(uppercaseMatch(title) || title !== newTitle){
             NodeID3.update(
                 {
                     title: newTitle
@@ -52,7 +51,7 @@ function main(): void{
                 filename
             );
         }
-        if(uppercaseMatch(artist)){
+        if(uppercaseMatch(artist) || artist !== newArtist){
             NodeID3.update(
                 {
                     artist: newArtist
@@ -72,7 +71,7 @@ function main(): void{
         const newFilename:string = `${argPath}\\${newTitle}-${newArtist}.mp3`;
         //
         if(filename == newFilename){
-            console.log(`${newTitle}-${newArtist}.mp3`, 'not renamed, file already has the expected name.');
+            console.log(`${filename}`, 'not renamed, file already has the expected name.');
         }
         else{
             // Rename files that can be renamed
