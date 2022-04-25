@@ -38,6 +38,7 @@ For now only runs on windows because difference on path names. This will work on
 
 ## TODO:
 
+Remove prefixes like: 'EP', 'Japanesse Edition'...
 Like UnitWork for updating metatags
 
 FIXME: 'VI' roman number outputs 'Vi'

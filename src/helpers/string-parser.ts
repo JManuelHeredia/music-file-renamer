@@ -1,6 +1,6 @@
 export function titleCaseParser( title:string ): string {
     if(!title) return '';
-    let newTitle:string[] = title.trim().split(' ');
+    let newTitle:string[] = title.trim().replace(':', ';').split(' '); //TODO: replace ':' for another char
 
     //Remove/Ignore track numbers in the title with a format like this: "04 Title"
     newTitle.map(word => (word.match(/[a-zA-Z]/g)) ? word : '');
