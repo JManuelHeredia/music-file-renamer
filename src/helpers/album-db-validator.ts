@@ -10,7 +10,7 @@ export interface Bands {
 }
 
 
-export const loadBandsAndAlbumsDB = ( path:string = 'M:' ): [ Bands, string[]] /*:Map< string, string[] >*/ => {
+export const loadBandsAndAlbumsDB = ( path:string = 'M:' ): [ Bands, string[]] => {
   try {
     let albumsAndBands:string = fs.readFileSync( `${ path }\\json_bands.json`, { encoding: 'utf-8' });
 
@@ -21,7 +21,6 @@ export const loadBandsAndAlbumsDB = ( path:string = 'M:' ): [ Bands, string[]] /
   } catch (error) {
     console.log( error );
   }
-  // return bands;
   return [{}, []]
 }
 
