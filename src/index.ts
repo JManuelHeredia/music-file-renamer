@@ -124,7 +124,7 @@ function main(): void{
           console.log( 'Error renaming:', file );
           throw err;
         }
-        console.log( filename, "renamed succefully!" );
+        console.log( tempFileName, "renamed succefully!" );
       });
     }
 
