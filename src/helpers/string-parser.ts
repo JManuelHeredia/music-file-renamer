@@ -8,7 +8,7 @@ export const romanNumerals:RegExp = new RegExp(/^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|
  * @returns { String } i.e. 'Soy Un Pescadito'
  */
 
-// ? Single, Deluxe, Edition, 
+// ? Single, Deluxe, Edition, Bonus, Acustic
 
 export function titleCaseParser( tagStringToParse:string ): string {
   if(!tagStringToParse) return '';
@@ -29,8 +29,8 @@ export function titleCaseParser( tagStringToParse:string ): string {
       // ! TODO: Remerber the usage of this number, maybe '('
       if( i == 0 && word.match( /\W/ ) ) return '';
       const startFrom:number = ( word.charAt(0).match( /\W/ )) ? 1 : 0;
-      if ( word.match( romanNumerals )) return word.toUpperCase();
-      return `${ startFrom ? word.charAt(0): ''}${ word[ startFrom ].toUpperCase() + word.substring( startFrom + 1 ).toLowerCase()}`.trim();
+      if ( word.match( romanNumerals )) return word?.toUpperCase() ?? word;
+      return `${ startFrom ? word.charAt(0): ''}${ word[ startFrom ]?.toUpperCase() + word.substring( startFrom + 1 ).toLowerCase()}`.trim().replace( 'undefined', '' );
     });
   } catch ( error ) {
     console.log( 'Error parsing: ', tagStringToParse );

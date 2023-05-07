@@ -18,6 +18,7 @@ interface Bands {
 function main(): void{
 
   // let artistAndAlbums:[ object, string[]];
+  let bands:Bands = {};
 
   // ! Expected to be executed with a path arg i.e. node index.js 'valid-path'
   const argPath:string = process.argv[2].toString(); 
@@ -65,22 +66,13 @@ function main(): void{
 
     let objBandName:string = parsedArtist.toLocaleLowerCase().split(' ').join('_');
 
-    let bandExist:string[] | undefined;
-    if( bandNames.includes( objBandName )){
-      bandExist = artistAndAlbums[ objBandName ]?.albums;
-    }
-    if( bandExist == undefined ) bandExist = [ parsedAlbum ];
-
-    let albumAlreadyListened:boolean = false;
-    if( bandExist?.includes( parsedAlbum.trim() )) albumAlreadyListened = true;
-
     let band:Band = {
       band_name : parsedArtist,
-      albums    : albumAlreadyListened ? bandExist :
-        bandExist?.length ? [ ...bandExist, parsedAlbum.trim() ] : [ parsedAlbum.trim() ]
+      albums    : bands[ objBandName ]?.albums?.includes( parsedAlbum ) ?
+        bands[ objBandName ].albums : [ parsedAlbum.trim() ]
     }
 
-    artistAndAlbums[ objBandName ] = band;
+    bands[ objBandName ] = band;
 
     //Remove Uppercase for MetaTags
     if( uppercaseMatch( title ) || title !== newTitle ){
@@ -129,6 +121,39 @@ function main(): void{
     }
 
   });
+
+  // ! Check repeated albums
+  // FIXME!!
+  let warnedItems:string[] = [];
+  Object.keys( bands ).forEach( bandName =>{
+    if( !bandNames.includes( bandName )){
+      return; //Band not listened yet
+    }
+
+    const listenedAlbums = artistAndAlbums[ bandName ].albums;
+    bands[ bandName ].albums.forEach( album => {
+      listenedAlbums.map( listenedAlbum =>{
+        if( listenedAlbum == album ){
+          if( warnedItems.includes( album )) return;
+          console.warn( `Album ${ album } from band ${ bandName } already listened?` );
+          warnedItems.push( album )
+          return;
+        }
+        if( !listenedAlbums.includes( album )){
+          artistAndAlbums[ bandName ].albums.push( album );
+        }
+      })
+      let { [ bandName ]:toRemove, ...restBands } = bands;
+      bands = {
+        ...restBands
+      }
+    })
+  })
+
+  artistAndAlbums = {
+    ...artistAndAlbums,
+    ...bands
+  }
 
   writeToDB( artistAndAlbums );
   // Finish?
